@@ -1,0 +1,100 @@
+<!-- Load Module Style -->
+<link href="<?php echo $this->view_dir; ?>css/styles.css" rel="stylesheet" type="text/css" />
+<?php
+    echo $this->Html->ifSet($message);
+    Loader::loadModels($this, array("BlestaCms.CmsPages"));
+    $default_lang = $this->CmsPages->getAllLang()[0]->uri;
+?>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="list-group">
+              <div class="panel-blesta">
+                  <div class="panel-heading">
+                      <h3 class="panel-title"><?php echo $this->_("blesta_cms.categories", true); ?></h3>
+                  </div>
+              </div>
+              <div id="catagories">
+                  <?php
+                      foreach($categories as $category) {
+                  ?>
+                  <a href="<?php echo $this->base_uri . 'category/' . $this->Html->safe($category->id) . '/'; ?>" class="list-group-item left-nav">
+                      <?php echo $this->Html->safe(empty($category->title[$lang]) ? $category->title[$default_lang] : $category->title[$lang]); ?>
+                  </a>
+                  <?php
+                    }
+                  ?>
+              </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+        <?php
+            if(isset($entries) && count($entries) > 0){
+                foreach ($entries as $entry) {
+                    if (($entry->permissions == 'logged' && $logged_in) || ($entry->permissions == 'guests' && !$logged_in) || $entry->permissions == 'all') {
+        ?>
+            <div class="panel panel-default panel-blesta">
+                <div class="panel-heading">
+                    <h3 class="panel-title" style="margin-left: 10px;"><?php echo $this->Html->safe(empty($entry->title[$lang]) ? $entry->title[$default_lang] : $entry->title[$lang]); ?></h3>
+                </div>
+                <div class="panel-body">
+                    <?php
+                        if (empty($entry->content[$lang])) {
+                    ?>
+                        <div class="alert alert-info">
+                            <strong>Info!</strong> <?php echo $this->_("blesta_cms.not_available_lang", true); ?>
+                        </div>
+                    <?php
+                        }
+                    ?>
+                    <?php echo trim(substr((empty($entry->content[$lang]) ? $entry->content[$default_lang] : $entry->content[$lang]), 0, 500), '...'); ?>...
+                    <div class="pull-right" style="padding-top: 20px;">
+                        <?php
+                            if (!empty($post->date_updated)) {
+                        ?>
+                        <span style="background-color:#3b3e46; color:#fff !important;" class="label label-default"><?php echo $this->_("blesta_cms.date_updated", true); ?>: <?php echo $this->Date->cast($this->Html->ifSet($entry->date_updated), "Y-m-d"); ?></span>
+                        <?php
+                            }
+                        ?>
+                        <span style="background-color:#3b3e46; color:#fff !important;" class="label label-default"><?php echo $this->_("blesta_cms.date_added", true); ?>: <?php echo $this->Date->cast($this->Html->ifSet($entry->date_added), "Y-m-d"); ?></span>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-xs-3 col-sm-2 col-md-1 col-lg-1">
+                            <img src="//www.gravatar.com/avatar/<?php echo md5(strtolower(trim($entry->author->email)));?>?s=100" class="img-thumbnail img-responsive" />
+                        </div>
+                        <div class="col-xs-9 col-sm-10 col-md-8 col-lg-9">
+                            <p style="padding: 5px 0px; margin: 0px;">
+                                <strong><?php echo $this->Html->ifSet($entry->author->first_name); ?> <?php echo $this->Html->ifSet($entry->author->last_name); ?></strong>
+                                <br>
+                                <small>@<?php echo $this->Html->ifSet($entry->author->username); ?> - <?php echo $this->Html->ifSet($entry->author->group->name); ?></small>
+                            </p>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-2">
+                            <a href="<?php echo $this->base_uri . ($default_lang !== $lang && !empty($entry->content[$lang]) ? $lang . '/' : null) . "blog/" . $this->Html->ifSet($entry->uri); ?>" class="btn btn-sm btn-block btn-primary" style="margin-top: 10px;">
+                              <?php echo $this->_("blesta_cms.read_more", true); ?>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php
+                    }
+                }
+            } else { ?>
+            <div class="panel panel-default panel-blesta">
+                <div class="panel-heading">
+                    <h3 class="panel-title" style="margin-left: 10px;">No Posts</h3>
+                </div>
+                <div class="panel-body">
+                    <p>There are no Posts under this Category</p>
+                </div>
+            </div>
+	    <?php
+	    }
+        ?>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>

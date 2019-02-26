@@ -1,0 +1,149 @@
+<!-- Load Module Style -->
+<link href="<?php echo $this->view_dir; ?>css/styles.css" rel="stylesheet" type="text/css" />
+
+<?php
+    echo $this->Html->ifSet($message);
+?>
+        <div class="col-md-3" style="margin-top: 15px;">
+            <div class="list-group">
+                <div class="panel-blesta">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><?php echo $this->_("blesta_cms.categories", true); ?></h3>
+                    </div>
+                </div>
+                <div id="catagories">
+                    <?php foreach($categories as $category) { ?>
+                        <a href="<?php echo $this->base_uri . 'category/' . $this->Html->safe($category->id) . '/'; ?>" class="list-group-item left-nav">
+                            <?php echo $this->Html->safe(empty($category->title[$lang]) ? $category->title[$default_lang] : $category->title[$lang]); ?>
+                        </a>
+                    <?php
+                        }
+                    ?>
+                </div>
+                <div style="margin-top:10px;">
+                    <button type="button" class="btn btn-primary btn-default" data-toggle="modal" data-target="#addCommentBox">
+                        <?php echo $this->_("blesta_cms.add_comment", true); ?>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="panel panel-default panel-blesta" itemscope itemtype="http://schema.org/NewsArticle">
+                <div class="panel-heading">
+                    <h3 class="panel-title" style="margin-left: 10px;" itemprop="headline"><?php echo $title; ?></h3>
+                    <span itemprop="datePublished" content="<?php echo $this->Date->cast($this->Html->ifSet($date_added), "Y-m-d"); ?>"></span>
+                </div>
+                <div class="panel-body" itemprop="articleBody">
+                    <?php echo $content; ?>
+                    <div class="pull-right" style="padding-top: 20px;">
+                        <?php
+                            if (!empty($post->date_updated)) {
+                        ?>
+                        <span class="label label-default"><?php echo $this->_("blesta_cms.date_updated", true); ?>: <?php echo $this->Date->cast($this->Html->ifSet($post->date_updated), "Y-m-d"); ?></span>
+                        <?php
+                            }
+                        ?>
+                        <span class="label label-default"><?php echo $this->_("blesta_cms.date_added", true); ?>: <?php echo $this->Date->cast($this->Html->ifSet($date_added), "Y-m-d"); ?></span>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-xs-3 col-sm-2 col-md-1 col-lg-1">
+                            <img src="//www.gravatar.com/avatar/<?php echo md5(strtolower(trim($post->author->email)));?>?s=100" class="img-thumbnail img-responsive" />
+                        </div>
+                        <div class="col-xs-9 col-sm-10 col-md-11 col-lg-11">
+                            <p style="padding: 5px 0px; margin: 0px;">
+                                <strong><?php echo $this->Html->ifSet($post->author->first_name); ?> <?php echo $this->Html->ifSet($post->author->last_name); ?></strong>
+                                <br>
+                                <small>@<?php echo $this->Html->ifSet($post->author->username); ?> - <?php echo $this->Html->ifSet($post->author->group->name); ?></small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="comments">
+                <?php
+                    if (count($comments) > 0 ) {
+                ?>
+                <h4><?php echo $this->_("blesta_cms.view_comments", true); ?></h4>
+                <?php
+                        foreach ($comments as $key => $value) {
+                ?>
+                <div class="panel panel-default panel-blesta">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <?php echo $comments[$key]->full_name; ?> - <?php echo $this->Date->cast($this->Html->ifSet($comments[$key]->date_added), "M d Y H:i"); ?>
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-md-2">
+                            <img src="//www.gravatar.com/avatar/<?php echo md5(strtolower(trim($this->Html->_($comments[$key]->email, true))));?>?s=100" class="img-thumbnail img-responsive" />
+                        </div>
+                        <div class="col-md-10">
+                            <p><?php echo $comments[$key]->content; ?></p>
+                        </div>
+                    </div>
+                </div>
+                <?php
+                        }
+                        if ($this->Pagination->hasPages()) {
+                            $this->Pagination->build();
+                        }
+                    }
+                ?>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="addCommentBox" style="z-index:9999" tabindex="-1" role="dialog" aria-labelledby="Commentbox">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <?php
+                        $this->Form->create();
+                    ?>
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel"><?php echo $this->_("blesta_cms.add_comment", true); ?></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <?php
+                                $this->Form->label($this->_("blesta_cms.full_name", true), "full_name");
+                                $this->Form->fieldText("full_name", $this->Html->ifSet($vars->full_name), array('id' => "full_name", 'class' => "form-control"));
+                            ?>
+                        </div>
+                        <div class="form-group">
+                            <?php
+                                $this->Form->label($this->_("blesta_cms.email", true), "email");
+                                $this->Form->fieldText("email", $this->Html->ifSet($vars->email), array('id' => "email", 'class' => "form-control"));
+                            ?>
+                        </div>
+                        <div class="form-group">
+                            <?php
+                                $this->Form->label($this->_("blesta_cms.comment", true), "content");
+                                $this->Form->fieldTextarea("content", $this->Html->ifSet($vars->content), array('id' => "content", 'rows' => 5, 'class' => "form-control"));
+                            ?>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-plus-circle"></i> <?php $this->_("blesta_cms.submit");?></button>
+                    </div>
+                    <?php
+                        $this->Form->end();
+                    ?>
+                </div>
+            </div>
+        </div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#comments .pagination ajax.a").on("click", function () {
+            var dthis = $(this);
+            var link = dthis.innerHTML;
+            var href = dthis.attr("href");
+            if (IsNumeric(link) === true) {
+            dthis.attr("href") = href;
+            }
+        });
+    });
+</script>

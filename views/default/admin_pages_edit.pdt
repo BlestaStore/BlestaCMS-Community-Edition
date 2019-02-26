@@ -1,0 +1,196 @@
+<?php
+    echo $this->Html->ifSet($message);
+
+    // Create lang tabs
+    $i = true;
+    foreach ($langs as $lang) {
+        $tabs[] = [
+            'name' => $lang->title,
+            'attributes' => ["class" => ($i ? 'lang_tab active' : 'lang_tab'), "href" => "#", "data-target" => "#tab_content_".$lang->uri]
+        ];
+    }
+
+    // Create widget
+    $this->Widget->clear();
+    $this->Widget->setTabs($tabs);
+    $this->Widget->setStyleSheet($this->view_dir . "css/styles.css");
+    $this->Widget->create($this->_("blesta_cms.addpage", true));
+
+    // Create Form
+    $this->Form->create();
+    
+    $i = true;
+    foreach ($langs as $lang) {
+?>
+<div id="tab_content_<?php echo $lang->uri; ?>" class="inner content <?php if(!$i) { ?>hidden<?php } ?>">
+    <div class="pad">
+        <div class="row">
+            <ul>
+                <li class="col-md-3 col-sm-6">
+                    <?php
+                        $this->Form->label($this->_("blesta_cms.title", true), "title");
+                        $this->Form->fieldText("title[".$lang->uri."]", $this->Html->ifSet($vars->title[$lang->uri]), array('id' => "title"));
+                    ?>
+                </li>
+                <li class="col-md-3 col-sm-6">
+                    <?php
+                        $this->Form->label($this->_("blesta_cms.uri", true), "uri");
+                        $this->Form->fieldText("uri", $this->Html->ifSet($vars->uri), array('id' => "uri"));
+                    ?>
+                </li>
+                <li class="col-md-3 col-sm-6">
+                    <?php
+                        $this->Form->label($this->_("blesta_cms.description", true), "description");
+                        $this->Form->fieldText("description[".$lang->uri."]", $this->Html->ifSet($vars->description[$lang->uri]), array('id' => "description"));
+                    ?>
+                </li>
+            </ul>
+        </div>
+        <ul>
+            <li>
+                <?php
+                    $this->Form->label($this->_("blesta_cms.meta_tags", true), "meta_tags");
+                ?>
+                <?php
+                    if (count($vars->meta_tags[$lang->uri]) > 0) {
+                        $b = true;
+                        foreach ($vars->meta_tags[$lang->uri]['key'] as $key => $value) {
+                ?>
+                    <div id="meta_tag_textbox">
+                        <?php
+                            $this->Form->fieldText("meta_tags[".$lang->uri."][key][]", $vars->meta_tags[$lang->uri]['key'][$key], array('id' => "meta_tags"));
+                            $this->Form->fieldText("meta_tags[".$lang->uri."][value][]", $vars->meta_tags[$lang->uri]['value'][$key], array('id' => "meta_tags"));
+
+                            if ($b) {
+                        ?>
+                        <a href="#" class="btn btn-sm btn-default" id="add_tag" lang="<?php echo $lang->uri; ?>" style="padding: 2px 7px !important; margin-top: -1px !important;"><i class="fa fa-plus"></i></a>
+                        <?php
+                            } else {
+                        ?>
+                        <a href="#" class="btn btn-sm btn-default" id="delete_tag" lang="<?php echo $lang->uri; ?>" style="padding: 2px 7px !important; margin-top: -1px !important;"><i class="fa fa-minus"></i></a>
+                        <?php 
+                            }
+                        ?>
+                    </div>
+                <?php
+                            $b = false;
+                        }
+                    } else {
+                ?>
+                    <div id="meta_tag_textbox">
+                        <?php
+                            $this->Form->fieldText("meta_tags[".$lang->uri."][key][]", null, array('id' => "meta_tags"));
+                            $this->Form->fieldText("meta_tags[".$lang->uri."][value][]", null, array('id' => "meta_tags"));
+                        ?>
+                        <a href="#" class="btn btn-sm btn-default" id="add_tag" lang="<?php echo $lang->uri; ?>" style="padding: 2px 7px !important; margin-top: -1px !important;"><i class="fa fa-plus"></i></a>
+                    </div>
+                <?php
+                    }
+                ?>
+            </li>
+            <li>
+                <?php
+                    $this->Form->label($this->_("blesta_cms.access", true), "access");
+                    $this->Form->fieldSelect("access", ["public" => $this->_("blesta_cms.public", true), "hidden" => $this->_("blesta_cms.hidden", true)], $this->Html->ifSet($vars->access), array('id' => "access"));
+                ?>
+            </li>
+            <li>
+                <?php
+                    $this->Form->label($this->_("blesta_cms.permissions", true), "permissions");
+                    $this->Form->fieldSelect("permissions", ["all" => $this->_("blesta_cms.all", true), "logged" => $this->_("blesta_cms.logged", true), "guests" => $this->_("blesta_cms.guests", true)], $this->Html->ifSet($vars->permissions), array('id' => "permissions"));
+                ?>
+            </li>
+            <li>
+                <?php
+                    $this->Form->label($this->_("blesta_cms.tags", true), "tags");
+                ?>
+                <div class="accent_box">
+                    <?php
+                        foreach ($this->Html->ifSet($tags, array()) as $tag)
+                            echo $this->Html->concat(" ", $this->Html->_($tag, true), " ");
+                    ?>
+                </div>
+            </li>
+            <li>
+                <?php
+                    $this->Form->label($this->_("blesta_cms.content", true), "content");
+                    $this->Form->fieldTextarea("content[".$lang->uri."]", $this->Html->ifSet($vars->content[$lang->uri]), array('id' => "content", 'class'=>"wysiwyg"));
+                ?>
+            </li>
+        </ul>
+        <div class="button_row">
+            <a class="btn btn-primary pull-right submit" href="#"><?php $this->_("blesta_cms.submit");?></a>
+        </div>
+    </div>
+</div>
+<?php
+        $i = false;
+    }
+
+    $this->Form->end();
+    $this->Widget->end();
+?>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        // Tabs
+        $('.lang_tab:first').parent().addClass('current');
+        $('.lang_tab').click(function() {
+            $('.lang_tab').parent().removeClass('current');
+            $('.lang_tab').removeClass('active');
+            $(this).parent().addClass('current');
+            $(this).addClass('active');
+            $('.content').addClass('hidden');
+
+            var object = $(this).attr('data-target');
+            $(object).removeClass('hidden');
+
+            return false;
+        });
+
+        // Sync uri field
+        $('input[name="uri"]').change(function() {
+            var value = $(this).val();
+            $('input[name="uri"]').val(value);
+        });
+
+        // Sync access field
+        $('select[name="access"]').change(function() {
+            var value = $(this).val();
+            $('select[name="access"]').val(value);
+        });
+
+        // Sync permissions field
+        $('select[name="permissions"]').change(function() {
+            var value = $(this).val();
+            $('select[name="permissions"]').val(value);
+        });
+
+        // Add tags
+        $('#add_tag').live('click', function() {
+            var lang = $(this).attr('lang');
+            var html = $('#tab_content_'+lang+' #meta_tag_textbox:last').html();
+            $('#tab_content_'+lang+' #meta_tag_textbox:last').parent().append('<div class="delete-btn" id="meta_tag_textbox">'+html+'</div>');
+            $('#tab_content_'+lang+' #meta_tag_textbox.delete-btn:last input').val(' ');
+            $('#tab_content_'+lang+' #meta_tag_textbox.delete-btn:last #add_tag').removeAttr('id').attr('id', 'delete_tag').html('<i class="fa fa-minus"></i>');
+
+            return false;
+        });
+
+        // Remove tags
+        $('#delete_tag').live('click', function() {
+            $(this).parent().remove();
+
+            return false;
+        });
+    });
+</script>
+
+<?php
+$this->Javascript->setInline("
+$(document).ready(function() {
+    $('#content').ckeditor(function() {}, {language: '" . substr(Configure::get('Blesta.language'), 0, 2) . "'});
+    $('div.tab_content').blestaTabbedContent();
+});
+");
+?>

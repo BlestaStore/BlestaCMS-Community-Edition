@@ -1,0 +1,111 @@
+<?php
+    echo $this->Html->ifSet($message);
+
+    $this->Widget->clear();
+    $this->Widget->setStyleSheet($this->view_dir . "css/styles.css");
+    $this->Widget->create($this->_("blesta_cms.page_title", true));
+?>
+
+<div class="inner content">
+    <div class="title_row first"><h3><?php $this->_("blesta_cms.languages"); ?></h3></div>
+
+    <table class="table">
+        <tr class="heading_row">
+            <td><span><?php $this->_("blesta_cms.language"); ?></span></td>
+            <td><span><?php $this->_("blesta_cms.uri"); ?></span></td>
+            <td class="last"><span><?php $this->_("blesta_cms.options"); ?></span></td>
+        </tr>
+        <?php
+            if (!empty($langs)) {
+                foreach ($langs as $lang) {
+        ?>
+        <tr>
+            <td style="text-transform: capitalize;"><?php echo $this->Html->safe($lang->title); ?></td>
+            <td><?php echo $this->Html->safe($lang->uri); ?></td>
+            <td>
+                <?php
+                    $this->Form->create('', ['id' => 'delete_lang_'.$lang->uri]);
+                    $this->Form->fieldHidden("type", 'delete');
+                    $this->Form->fieldHidden("lang", $lang->uri);
+                ?>
+                <a href="#" onclick="$('#edit_lang_<?php echo $this->Html->safe($lang->uri); ?>').show();"><?php $this->_("blesta_cms.edit"); ?></a>,
+                <a class="manage" href="#" onclick="$('#delete_lang_<?php echo $this->Html->safe($lang->uri); ?>').submit();"><?php $this->_("blesta_cms.delete"); ?></a>
+                <?php
+                    $this->Form->end();
+                ?>
+            </td>
+        </tr>
+        <tr id="edit_lang_<?php echo $this->Html->safe($lang->uri); ?>" style="display: none;">
+            <?php
+                $this->Form->create();
+                $this->Form->fieldHidden("type", 'edit');
+                $this->Form->fieldHidden("old_lang", $lang->uri);
+            ?>
+            <td><?php $this->Form->fieldText("title", $this->Html->ifSet($lang->title), array('id' => "title")); ?></td>
+            <td><?php $this->Form->fieldText("lang", $this->Html->ifSet($lang->uri), array('id' => "lang")); ?></td>
+            <td>
+                <a class="submit" href="#" onclick="$('#edit_lang_<?php echo $this->Html->safe($lang->uri); ?> form').submit();"><?php $this->_("blesta_cms.edit"); ?></a>,
+                <a class="submit manage" href="#" onclick="$('#edit_lang_<?php echo $this->Html->safe($lang->uri); ?>').hide();"><?php $this->_("blesta_cms.cancel"); ?></a>
+            </td>
+            <?php
+                $this->Form->end();
+            ?>
+        </tr>
+        <?php
+                }
+            } else {
+        ?>
+        <tr>
+            <td style="text-transform: capitalize;"><?php echo Locale::getDisplayLanguage($default_lang, $default_lang); ?></td>
+            <td><?php echo $this->Html->safe($default_lang); ?></td>
+            <td><i>Default</i></td>
+        </tr>
+        <?php
+            }
+        ?>
+        <tr id="add_lang_row" style="display: none;">
+            <?php
+                $this->Form->create();
+                $this->Form->fieldHidden("type", 'add');
+            ?>
+            <td><?php $this->Form->fieldText("title", $this->Html->ifSet($vars->title), array('id' => "title")); ?></td>
+            <td><?php $this->Form->fieldText("lang", $this->Html->ifSet($vars->lang), array('id' => "lang")); ?></td>
+            <td>
+                <a class="submit" href="#" onclick="$('#add_lang_row form').submit();"><?php $this->_("blesta_cms.add_language"); ?></a>,
+                <a class="submit manage" href="#" onclick="$('#add_lang_row').hide();"><?php $this->_("blesta_cms.cancel"); ?></a>
+            </td>
+            <?php
+                $this->Form->end();
+            ?>
+        </tr>
+    </table>
+    <br>
+    <div class="links_row">
+        <a class="btn btn-primary pull-right" href="#" onclick="$('#add_lang_row').show();"><span><?php $this->_("blesta_cms.add_language"); ?></span></a>
+    </div>
+
+    <!-- Caching -->
+    <div class="title_row"><h3><?php $this->_("blesta_cms.caching"); ?></h3></div>
+    <div class="links_row">
+        <?php
+            $this->Form->create();
+            if ($caching->value) {
+                $this->Form->fieldHidden("type", 'caching');
+                $this->Form->fieldHidden("caching", 0);
+        ?>
+        <a class="btn btn-danger submit pull-right" href="#"><span><?php $this->_("blesta_cms.disable_caching"); ?></span></a>
+        <?php
+            } else {
+                $this->Form->fieldHidden("type", 'caching');
+                $this->Form->fieldHidden("caching", 1);
+        ?>
+        <a class="btn btn-success submit pull-right" href="#"><span><?php $this->_("blesta_cms.enable_caching"); ?></span></a>
+        <?php
+            }
+            $this->Form->end();
+        ?>
+    </div>
+</div>
+<?php
+    $this->Widget->end();
+?>

@@ -1,0 +1,76 @@
+<?php
+    echo $this->Html->ifSet($message);
+
+    // Create lang tabs
+    $i = true;
+    foreach ($langs as $lang) {
+        $tabs[] = [
+            'name' => $lang->title,
+            'attributes' => ["class" => ($i ? 'lang_tab active' : 'lang_tab'), "href" => "#", "data-target" => "#tab_content_".$lang->uri]
+        ];
+    }
+
+    // Create widget
+	$this->Widget->clear();
+	$this->Widget->setTabs($tabs);
+	$this->Widget->setStyleSheet($this->view_dir . "css/styles.css");
+	$this->Widget->create($this->_("blesta_cms.addcategory", true));
+
+	$this->Form->create();
+
+	$i = true;
+    foreach ($langs as $lang) {
+?>
+<div id="tab_content_<?php echo $lang->uri; ?>" class="inner content <?php if(!$i) { ?>hidden<?php } ?>">
+	<div class="pad">
+		<ul>
+			<li>
+				<?php
+					$this->Form->label($this->_("blesta_cms.title", true), "title");
+					$this->Form->fieldText("title[".$lang->uri."]", $this->Html->ifSet($vars->title[$lang->uri]), array('id' => "title"));
+				?>
+			</li>
+			<li>
+				<?php
+					$this->Form->label($this->_("blesta_cms.access", true), "access");
+					$this->Form->fieldSelect("access", ["public" => $this->_("blesta_cms.public", true), "hidden" => $this->_("blesta_cms.hidden", true)], $this->Html->ifSet($vars->access), array('id' => "access"));
+				?>
+			</li>
+		</ul>
+		<div class="button_row">
+			<a class="btn btn-primary pull-right submit" href="#"><?php $this->_("blesta_cms.submit");?></a>
+		</div>
+	</div>
+</div>
+<?php
+		$i = false;
+	}
+
+	$this->Form->end();
+	$this->Widget->end();
+?>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Tabs
+        $('.lang_tab:first').parent().addClass('current');
+        $('.lang_tab').click(function() {
+            $('.lang_tab').parent().removeClass('current');
+            $('.lang_tab').removeClass('active');
+            $(this).parent().addClass('current');
+            $(this).addClass('active');
+            $('.content').addClass('hidden');
+
+            var object = $(this).attr('data-target');
+            $(object).removeClass('hidden');
+
+            return false;
+        });
+
+		// Sync access field
+        $('select[name="access"]').change(function() {
+            var value = $(this).val();
+            $('select[name="access"]').val(value);
+        });
+    });
+</script>

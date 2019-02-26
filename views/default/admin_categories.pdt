@@ -1,0 +1,61 @@
+<?php
+    echo $this->Html->ifSet($message);
+
+    $this->Widget->clear();
+    $this->Widget->setStyleSheet($this->view_dir . "css/styles.css");
+    $this->Widget->create($this->_("blesta_cms.categories", true));
+?>
+<div class="inner">
+    <div class="links_row">
+        <a class="btn btn-default btn-sm pull-right" href="<?php echo $this->base_uri; ?>plugin/blesta_cms/admin_categories/add/"><i class="fa fa-plus"></i></a>
+    </div>
+    <div class="common_box_content">
+        <table class="table">
+            <tr class="heading_row">
+                <td><span><?php $this->_("blesta_cms.title"); ?></span></td>
+                <td><span><?php $this->_("blesta_cms.access"); ?></span></td>
+                <td class="last"><span><?php $this->_("blesta_cms.options"); ?></span></td>
+            </tr>
+            <?php
+                if (count($categories) > 0) {
+                    foreach ($categories as $category) {
+            ?>
+            <tr>
+                <td><?php echo $this->Html->safe(reset($category->title)); ?></td>
+                <td><?php echo $this->_("blesta_cms." . $category->access); ?></td>
+                <td>
+                    <a href="<?php echo $this->base_uri; ?>plugin/blesta_cms/admin_categories/edit/<?php echo $this->Html->safe($category->id); ?>/"><?php $this->_("blesta_cms.edit"); ?></a>, 
+                    <a id="page" class="delete manage" rel="<?php echo $this->_("blesta_cms.delete_text"); ?>" href="<?php echo $this->base_uri; ?>plugin/blesta_cms/admin_categories/delete/<?php echo $this->Html->safe($category->id); ?>/"><?php $this->_("blesta_cms.delete"); ?></a>
+                </td>
+            </tr>
+            <?php
+                    }
+                } else {
+            ?>
+            <tr>
+                <td colspan="7">
+                    <div class="empty_section">
+                        <div class="empty_box">
+                            <?php $this->_("blesta_cms.no_results"); ?>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <?php
+                }
+            ?>
+        </table>
+    </div>
+</div>
+<?php
+    $this->Widget->end();
+?>
+
+<script type="text/javascript">
+    // Blesta Modal Confirm
+     $('a.delete[rel]').blestaModalConfirm({
+        base_url: '<?php echo $this->base_uri;?>',
+        close: 'Close',
+        submit: false
+    });
+</script>

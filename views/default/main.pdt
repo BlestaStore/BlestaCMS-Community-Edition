@@ -1,0 +1,7 @@
+<!-- Load Module Style -->
+<link href="<?php echo $this->view_dir; ?>css/styles.css" rel="stylesheet" type="text/css" />
+
+<?php
+    echo $this->Html->ifSet($message);
+    echo $this->Html->ifSet($content);
+?>
