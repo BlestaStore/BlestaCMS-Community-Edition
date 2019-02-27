@@ -18,7 +18,7 @@
 
     // Create Form
     $this->Form->create();
-    
+
     $i = true;
     foreach ($langs as $lang) {
 ?>
@@ -52,7 +52,7 @@
                     $this->Form->label($this->_("blesta_cms.meta_tags", true), "meta_tags");
                 ?>
                 <?php
-                    if (count($vars->meta_tags[$lang->uri]) > 0) {
+                    /*if (count($vars->meta_tags[$lang->uri]) > 0) {
                         $b = true;
                         foreach ($vars->meta_tags[$lang->uri]['key'] as $key => $value) {
                 ?>
@@ -68,7 +68,7 @@
                             } else {
                         ?>
                         <a href="#" class="btn btn-sm btn-default" id="delete_tag" lang="<?php echo $lang->uri; ?>" style="padding: 2px 7px !important; margin-top: -1px !important;"><i class="fa fa-minus"></i></a>
-                        <?php 
+                        <?php
                             }
                         ?>
                     </div>
@@ -85,7 +85,7 @@
                         <a href="#" class="btn btn-sm btn-default" id="add_tag" lang="<?php echo $lang->uri; ?>" style="padding: 2px 7px !important; margin-top: -1px !important;"><i class="fa fa-plus"></i></a>
                     </div>
                 <?php
-                    }
+                  } */
                 ?>
             </li>
             <li>

@@ -213,7 +213,7 @@ class CmsPages extends AppModel
                 'author'      => $this->Session->read('blesta_staff_id'),
                 'title'       => serialize($vars['title']),
                 'content'     => serialize($vars['content']),
-                'meta_tags'   => serialize($vars['meta_tags']),
+                'meta_tags'   => /*serialize($vars['meta_tags'])*/'',
                 'access'      => $vars['access'],
                 'permissions' => $vars['permissions'],
                 'date_added'  => $vars['date_added']
