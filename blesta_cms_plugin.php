@@ -19,7 +19,7 @@ class BlestaCmsPlugin extends Plugin
     /**
      * @var string The plugin version
      */
-    private static $version = '1.2.7';
+    private static $version = '1.3.0';
 
     /**
      * @var array The plugin authors
