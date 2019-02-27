@@ -37,10 +37,25 @@ class AdminManagePlugin extends AppController
     public function index()
     {
         $this->init();
-        $this->uses(['BlestaCms.CmsPages', 'Settings', 'Plugins']);
+        $this->uses(['BlestaCms.CmsPages', 'BlestaCms.CmsSettings', 'Settings', 'Plugins']);
         // Manage actions
 
         if (!empty($this->post)) {
+          if($this->post['type'] == 'recaptcha'){
+
+                    $settings1 = $this->post['settings_1'];
+                    $settings2 = $this->post['settings_2'];
+                    $setting_key = 'recaptcha';
+
+                    if($settings1 != '' && $settings2 != ''){
+                      $result = $this->CmsSettings->updateSettings($settings1, $settings2, $setting_key);
+                    }else{
+                      $result = $this->CmsSettings->updateSettings($settings1, $settings2, $setting_key);
+                    }
+
+                    $this->parent->flashMessage('message', "Successfully updated License Key");
+
+          }else{
               switch ($this->post['type']) {
                   case 'add':
                   $add = $this->CmsPages->addLang($this->post['title'], $this->post['lang']);
@@ -79,6 +94,7 @@ class AdminManagePlugin extends AppController
                         $this->parent->flashMessage('error', Language::_('blesta_cms.!error.requested_action', true));
                         break;
                     }
+                }
             $this->redirect($this->base_uri . 'settings/company/plugins/manage/' . $this->plugin_id . '/');
         }
 
@@ -86,10 +102,10 @@ class AdminManagePlugin extends AppController
         $langs        = $this->CmsPages->getAllLang();
         $default_lang = $this->CmsPages->getDefaultLang();
         $caching      = $this->Settings->getSetting('BlestaCms.Caching');
-      	$Licensing = new stdClass();
-      	Loader::loadModels($Licensing, array("settings"));
+        $recaptcha = $this->CmsSettings->getSettings('recaptcha');
 
-        return $this->partial('admin_manage_plugin', compact('langs', 'default_lang', 'caching'));
+
+        return $this->partial('admin_manage_plugin', compact('langs', 'default_lang', 'caching', 'recaptcha'));
     }
   	public function debug($a) {
   		echo "<pre>";

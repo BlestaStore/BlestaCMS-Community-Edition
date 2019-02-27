@@ -23,6 +23,7 @@ $lang['blesta_cms.!error.license_expired']          = 'Could Not Perform Install
 $lang['blesta_cms.!error.license_unknown']          = 'Could Not Perform Installation: License key is invalid';
 $lang['blesta_cms.!error.requested_action']         = 'Could not perform the requested action.';
 $lang['blesta_cms.!error.logged_in']                = 'You must be logged in to see this content.';
+$lang['blesta_cms.!error.recaptcha']                = 'Sorry you have failed the recaptcha.';
 
 $lang['blesta_cms.page_title']      = 'BlestaCMS Manager';
 $lang['blesta_cms.success']         = 'Form has been updated successfully';
@@ -92,3 +93,8 @@ $lang['blesta_cms.added_language']   = 'Language added successfully.';
 $lang['blesta_cms.caching']         = 'Caching';
 $lang['blesta_cms.enable_caching']  = 'Enable Caching';
 $lang['blesta_cms.disable_caching'] = 'Disable Caching';
+
+$lang['blesta_cms.recaptcha']       = 'Recaptcha';
+$lang['blesta_cms.public_key']      = 'Public Key';
+$lang['blesta_cms.private_key']     = 'Private Key';
+$lang['blesta_cms.update_recaptcha'] =  'Update Recaptcha';

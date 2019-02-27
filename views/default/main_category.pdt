@@ -47,7 +47,7 @@
                     <?php
                         }
                     ?>
-                    <?php echo trim(substr((empty($entry->content[$lang]) ? $entry->content[$default_lang] : $entry->content[$lang]), 0, 500), '...'); ?>...
+                    <?php echo substr((empty($entry->content[$lang]) ? $entry->content[$default_lang] : $entry->content[$lang]), 0, 350) . '...'; ?>
                     <div class="pull-right" style="padding-top: 20px;">
                         <?php
                             if (!empty($post->date_updated)) {

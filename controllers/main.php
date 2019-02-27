@@ -1,4 +1,5 @@
 <?php
+use Blesta\Core\Util\Captcha\CaptchaFactory;
 /**
  * Client side controller.
  *
@@ -46,7 +47,6 @@ class Main extends BlestaCmsController
             $this->view->set('menus_items', $this->CmsPages->getMenuItemsWithChilds());
             $this->set('menus_items', $this->CmsPages->getMenuItemsWithChilds());
         }
-
     }
 
     /**
@@ -204,7 +204,7 @@ class Main extends BlestaCmsController
     public function blog()
     {
         // Load models
-        $this->uses(['BlestaCms.CmsPages', 'PluginManager']);
+        $this->uses(['BlestaCms.CmsPages', 'BlestaCms.CmsSettings', 'PluginManager']);
 
         // Get uri
         if (isset($this->get[1])) {
@@ -262,12 +262,51 @@ class Main extends BlestaCmsController
         // Get all categories
         $categories = $this->CmsPages->getAllCategories();
 
+        $settings = $this->CmsSettings->getSettings('recaptcha');
+
+        $captcha = $this->getCaptcha([
+            'site_key' => $settings->settings_1,
+            'shared_key' => $settings->settings_2,
+            'ip_address' => $_SERVER['REMOTE_ADDR']
+        ]);
+
+        $this->set('recaptcha', $settings->settings_value);
+        $this->set('captcha', ($captcha !== null ? $captcha->buildHtml() : ''));
+
+        if ($settings->settings_1 != '') {
+            $this->set('settings1', $settings->settings_1);
+        }
+        if ($settings->settings_2 != '') {
+            $this->set('settings2', $settings->settings_2);
+        }
+
         // Add comment
         if (!empty($this->post)) {
-            $data            = $this->post;
-            $data['post_id'] = $post->id;
-            $result          = $this->CmsPages->addComment($data);
+            $data = $this->post;
+            if ($settings->settings_value != '') {
 
+                $response = (isset($data['g-recaptcha-response']) ? $data['g-recaptcha-response'] : '');
+                $success = $captcha->verify(['response' => $response]);
+
+            if ($success) {
+                $data['post_id'] = $post->id;
+                $result          = $this->CmsPages->addComment($data);
+            } else {
+                $this->setMessage('error', Language::_('blesta_cms.!error.recaptcha', true), false, null, false);
+                $result = false;
+            }
+            }else{
+                // No Recaptcha enabled, post as normal.
+                $data['post_id'] = $post->id;
+                $result          = $this->CmsPages->addComment($data);
+            }
+            // Parse result
+            if ($result) {
+                $this->flashMessage('message', Language::_('blesta_cms.success_comment', true), null, false);
+                $this->redirect($this->base_uri . 'blog/' . $post->uri);
+            } else {
+                $this->setMessage('error', Language::_('blesta_cms.!error.empty', true), false, null, false);
+            }
             // Parse result
             if ($result) {
                 $this->flashMessage('message', Language::_('blesta_cms.success_comment', true), null, false);
@@ -286,10 +325,10 @@ class Main extends BlestaCmsController
 
         // Get comments
         $comments      = $this->CmsPages->getCommentsPost($post->id, $page_number, true);
-        $total_results = count($this->CmsPages->getAllCommentsPost($page->id, true));
+        $total_results = count($this->CmsPages->getAllCommentsPost($post->id, true));
         $settings      = array_merge(Configure::get('Blesta.pagination_client'), [
             'total_results'    => $total_results,
-            'uri'              => $this->base_uri . 'blog/' . $page->uri . '/[p]/',
+            'uri'              => $this->base_uri . 'blog/' . $post->uri . '/[p]/',
             'results_per_page' => 5,
         ]);
         $this->helpers(['Pagination' => [[0 => $page_number], $settings]]);
@@ -300,7 +339,7 @@ class Main extends BlestaCmsController
         $this->set('post', $post);
         $this->set('title', $post->title[$lang]);
         $this->set('content', $post->content);
-	      $this->set('uri', "FFF");
+        $this->set('uri', "FFF");
         $this->set('comments', $comments);
         $this->set('meta_tags', $post->meta_tags[$lang]);
         $this->set('date_added', $post->date_added);
@@ -339,7 +378,7 @@ class Main extends BlestaCmsController
 
         // Redirect to 404 error if category is empty
         if (!$posts) {
-          //  $this->redirect($this->base_uri);
+            //  $this->redirect($this->base_uri);
         }
 
         // Tags
@@ -361,12 +400,12 @@ class Main extends BlestaCmsController
 
         // Parse posts
         $entries = [];
-        foreach ($posts as $post) {
-            $post->content[$lang] = H2o::parseString($post->content[$lang])->render($tags);
-
-            $entries[] = $post;
+        if ($posts) {
+            foreach ($posts as $post) {
+                $post->content[$lang] = H2o::parseString($post->content[$lang])->render($tags);
+                $entries[] = $post;
+            }
         }
-
         // Get all categories
         $categories = $this->CmsPages->getAllCategories();
 
@@ -383,5 +422,11 @@ class Main extends BlestaCmsController
         $this->structure->set('lang', $lang);
         $this->structure->set('page_title', $category->title[$lang]);
         $this->structure->set('description', $category->title[$lang]);
+    }
+
+    private function getCaptcha(array $options)
+    {
+      $factory = new CaptchaFactory();
+      return $factory->reCaptcha($options);
     }
 }

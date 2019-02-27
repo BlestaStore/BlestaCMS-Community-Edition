@@ -1,6 +1,8 @@
 <!-- Load Module Style -->
 <link href="<?php echo $this->view_dir; ?>css/styles.css" rel="stylesheet" type="text/css" />
-
+<?php if($recaptcha != ''){ ?>
+<script src='https://www.google.com/recaptcha/api.js'></script>
+<?php } ?>
 <?php
     echo $this->Html->ifSet($message);
 ?>
@@ -123,6 +125,9 @@
                                 $this->Form->fieldTextarea("content", $this->Html->ifSet($vars->content), array('id' => "content", 'rows' => 5, 'class' => "form-control"));
                             ?>
                         </div>
+                        <?php if($recaptcha != ''){ ?>
+                            <?php echo $captcha;?>
+                        <?php } ?>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

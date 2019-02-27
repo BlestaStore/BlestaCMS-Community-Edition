@@ -105,6 +105,30 @@
             $this->Form->end();
         ?>
     </div>
+
+    <!-- Caching -->
+    <div class="title_row"><h3><?php $this->_("blesta_cms.recaptcha"); ?></h3></div>
+    <?php $this->Form->create(); ?>
+    <div class="links_row" style="margin-bottom:15px;">
+        <?php
+            $this->Form->label($this->_("blesta_cms.public_key", true), "settings_1");
+            $this->Form->fieldText("settings_1", $this->Html->ifSet($recaptcha->settings_1), array('id' => "settings_1", 'class' => "form-control"));
+        ?>
+    </div>
+    <div class="links_row">
+        <?php
+            $this->Form->label($this->_("blesta_cms.private_key", true), "settings_2");
+            $this->Form->fieldText("settings_2", $this->Html->ifSet($recaptcha->settings_2), array('id' => "settings_2", 'class' => "form-control"));
+                $this->Form->fieldHidden("type", 'recaptcha');
+        ?>
+    </div>
+    <div class="links_row">
+        <a class="btn btn-default submit pull-right" href="#"><span><?php $this->_("blesta_cms.update_recaptcha"); ?></span></a>
+    </div>
+        <?php
+            $this->Form->end();
+        ?>
+    </div>
 </div>
 <?php
     $this->Widget->end();

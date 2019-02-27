@@ -335,11 +335,33 @@ class BlestaCmsPlugin extends Plugin
                     }
                 }
             }
-            if (version_compare($current_version, '1.2.5', '>')) {
+            if (version_compare($current_version, '1.2.5', '<')) {
                 // Alter Blog table to add support for image URLs.
                 $this->Record->query(
                   "ALTER TABLE `blestacms_blog_posts` ADD `image` TEXT( 255 ) AFTER `date_updated`;"
               );
+            }
+            if(version_compare($current_version, '1.2.8', '<')){
+              // Add Settings table.
+              $this->Record->setField('settings_id', ['type' => 'int', 'size' => 10, 'unsigned' => true, 'auto_increment' => true])
+                      ->setField('settings_key', ['type' => 'text'])
+                      ->setField('settings_value', ['type' => 'text'])
+                      ->setField('settings_description', ['type' => 'varchar', 'size' => 255])
+                      ->setField('settings_1', ['type' => 'varchar', 'size' => 255])
+                      ->setField('settings_2', ['type' => 'varchar', 'size' => 255])
+                      ->setField('company_id', ['type' => 'int', 'size' => 10, 'unsigned' => true])
+                      ->setKey(['settings_id'], 'primary')
+                      ->create('blestacms_settings', true);
+
+              //Insert Settings Data
+              $this->Record->insert('blestacms_settings', [
+                      'settings_key'           => 'recaptcha',
+                      'settings_value'         => NULL,
+                      'settings_1'             => NULL,
+                      'settings_2'             => NULL,
+                      'settings_description'   => 'Google Recaptcha',
+                      'company_id'             => Configure::get('Blesta.company_id'),
+              ]);
             }
         }
     }
