@@ -7,6 +7,7 @@
  * @copyright Copyright (c) 2018 Blesta.Store. All Rights Reserved.
  * @license Blesta.Store End User License Agreement
  * @author Blesta.Store <cms@blesta.store>
+ * Hi
  */
 
 class BlestaCmsPlugin extends Plugin
@@ -19,7 +20,7 @@ class BlestaCmsPlugin extends Plugin
     /**
      * @var string The plugin version
      */
-    private static $version = '1.3.1';
+    private static $version = '1.3.2';
 
     /**
      * @var array The plugin authors
@@ -204,6 +205,27 @@ class BlestaCmsPlugin extends Plugin
             $lang = $this->Companies->getSetting(Configure::get('Blesta.company_id'), 'language');
             $lang = explode('_', $lang->value, 2)[0];
             $this->Record->insert('blestacms_languages', ['uri' => $lang, 'company_id' => Configure::get('Blesta.company_id'), 'title' => $this->CmsPages->getDisplayLang($lang)]);
+
+            // Settings Table
+            $this->Record->setField('settings_id', ['type' => 'int', 'size' => 10, 'unsigned' => true, 'auto_increment' => true])
+                      ->setField('settings_key', ['type' => 'text'])
+                      ->setField('settings_value', ['type' => 'text'])
+                      ->setField('settings_description', ['type' => 'varchar', 'size' => 255])
+                      ->setField('settings_1', ['type' => 'varchar', 'size' => 255])
+                      ->setField('settings_2', ['type' => 'varchar', 'size' => 255])
+                      ->setField('company_id', ['type' => 'int', 'size' => 10, 'unsigned' => true])
+                      ->setKey(['settings_id'], 'primary')
+                      ->create('blestacms_settings', true);
+
+              //Insert Settings Data
+              $this->Record->insert('blestacms_settings', [
+                      'settings_key'           => 'recaptcha',
+                      'settings_value'         => NULL,
+                      'settings_1'             => NULL,
+                      'settings_2'             => NULL,
+                      'settings_description'   => 'Google Recaptcha',
+                      'company_id'             => Configure::get('Blesta.company_id'),
+              ]);
 
             // Load all the configuration files and insert the sample data in to the database.
             $config_files = array_diff(scandir(dirname(__FILE__) . DS . 'config' . DS), ['.', '..']);
