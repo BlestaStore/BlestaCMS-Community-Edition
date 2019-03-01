@@ -1,6 +1,6 @@
 ## BlestaCMS Community Edition
 
-Current version: **1.3.2**
+Current version: **1.3.3**
 
 #### About
 
@@ -366,6 +366,19 @@ Replace it with the following:
 <?php
 		}
 	}
+?>
+```
+
+#### How to display the Meta Tags on my theme?
+```
+<?php
+  if(!empty($meta_tags['key'])){
+    foreach ($meta_tags['key'] as $key => $value) {
+?>
+    <meta name="<?php echo $this->Html->safe($meta_tags['key'][$key]);?>" content="<?php echo $this->Html->safe($meta_tags['value'][$key]);?>">
+<?php
+    }
+  }
 ?>
 ```
 

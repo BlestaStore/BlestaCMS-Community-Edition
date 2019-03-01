@@ -216,7 +216,8 @@ class CmsPages extends AppModel
                 'meta_tags'   => /*serialize($vars['meta_tags'])*/'',
                 'access'      => $vars['access'],
                 'permissions' => $vars['permissions'],
-                'date_added'  => $vars['date_added']
+                'date_added'  => $vars['date_added'],
+                'image'       => ''
             ]);
 
             return true;
