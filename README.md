@@ -10,6 +10,14 @@ This plugin allows you to extend Blesta to make it your website. If you need sup
 If you would like to get support from the Blesta.store team you will require a paid license key. These come at a wide range of plans from monthly, yearly or one-time.
 Grabbing a key also allows you to access a more improved BlestaCMS Premium version.
 
+#### Extra Information:
+
+Premium support: https://blesta.store/plugin/support/validate
+
+Complimentary support: https://blesta.store/plugin/support/complimentary
+
+Task board: https://atlantis.plutio.com/p/cms
+
 #### How do I install?
 
 To install the BlestaCMS CE version simply upload the files to a folder called "blesta_cms" in the plugins or download the zip from the blesta.store website. The zip from the website has the plugins folder already created so you can just unzip it straight.
