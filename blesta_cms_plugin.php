@@ -20,7 +20,7 @@ class BlestaCmsPlugin extends Plugin
     /**
      * @var string The plugin version
      */
-    private static $version = '1.3.3';
+    private static $version = '1.3.4';
 
     /**
      * @var array The plugin authors
@@ -220,9 +220,9 @@ class BlestaCmsPlugin extends Plugin
               //Insert Settings Data
               $this->Record->insert('blestacms_settings', [
                       'settings_key'           => 'recaptcha',
-                      'settings_value'         => NULL,
-                      'settings_1'             => NULL,
-                      'settings_2'             => NULL,
+                      'settings_value'         => '',
+                      'settings_1'             => '',
+                      'settings_2'             => '',
                       'settings_description'   => 'Google Recaptcha',
                       'company_id'             => Configure::get('Blesta.company_id'),
               ]);
