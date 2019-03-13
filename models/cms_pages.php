@@ -213,11 +213,11 @@ class CmsPages extends AppModel
                 'author'      => $this->Session->read('blesta_staff_id'),
                 'title'       => serialize($vars['title']),
                 'content'     => serialize($vars['content']),
-                'meta_tags'   => /*serialize($vars['meta_tags'])*/'',
+                'meta_tags'   => serialize($vars['meta_tags']),
                 'access'      => $vars['access'],
                 'permissions' => $vars['permissions'],
                 'date_added'  => $vars['date_added'],
-                'image'       => ''
+                'image'       => $vars['image']
             ]);
 
             return true;
@@ -248,7 +248,8 @@ class CmsPages extends AppModel
                 'meta_tags'    => serialize($vars['meta_tags']),
                 'date_updated' => $vars['date_updated'],
                 'access'       => $vars['access'],
-                'permissions'  => $vars['permissions']
+                'permissions'  => $vars['permissions'],
+                'image'        => $vars['image']
             ]);
 
             return true;

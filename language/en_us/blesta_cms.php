@@ -66,6 +66,7 @@ $lang['blesta_cms.author']             = 'Author';
 $lang['blesta_cms.read_more']          = 'Read More';
 $lang['blesta_cms.meta_tags']          = 'Meta Tags';
 $lang['blesta_cms.not_available_lang'] = "This post it's not available in your language.";
+$lang['blesta_cms.image']              = "Blog image";
 
 $lang['blesta_cms.comments']      = 'Comments';
 $lang['blesta_cms.comment']       = 'Comment';

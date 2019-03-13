@@ -53,7 +53,7 @@
                     $this->Form->label($this->_("blesta_cms.meta_tags", true), "meta_tags");
                 ?>
                 <?php
-                    if(isset($vars->meta_tags) && count($vars->meta_tags[$lang->uri]) > 0) {
+                    if(isset($vars->meta_tags[$lang->uri]) && count($vars->meta_tags[$lang->uri]) != '') {
                         $b = true;
                         foreach ($vars->meta_tags[$lang->uri]['key'] as $key => $value) {
                 ?>
@@ -99,6 +99,12 @@
                 <?php
                     $this->Form->label($this->_("blesta_cms.permissions", true), "permissions");
                     $this->Form->fieldSelect("permissions", ["all" => $this->_("blesta_cms.all", true), "logged" => $this->_("blesta_cms.logged", true), "guests" => $this->_("blesta_cms.guests", true)], $this->Html->ifSet($vars->permissions), array('id' => "permissions"));
+                ?>
+            </li>
+            <li>
+                <?php
+                    $this->Form->label($this->_("blesta_cms.image", true), "image");
+                    $this->Form->fieldText("image", $this->Html->ifSet($vars->image), array('id' => "image"));
                 ?>
             </li>
             <li>

@@ -1,6 +1,6 @@
 ## BlestaCMS Community Edition
 
-Current version: **1.3.4**
+Current version: **1.3.5**
 
 #### About
 
