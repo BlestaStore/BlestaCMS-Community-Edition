@@ -84,6 +84,9 @@ $lang['blesta_cms.delete_text']   = 'Are you sure you want to delete this item?'
 $lang['blesta_cms.options']       = 'Options';
 $lang['blesta_cms.cancel']        = 'Cancel';
 $lang['blesta_cms.parent']        = 'Parent';
+$lang['blesta_cms.target']        = 'Target';
+$lang['blesta_cms.none']          = 'None';
+$lang['blesta_cms.newtab']        = 'New Tab';
 
 $lang['blesta_cms.languages']        = 'Languages';
 $lang['blesta_cms.language']         = 'Language';

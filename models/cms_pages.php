@@ -724,7 +724,8 @@ class CmsPages extends AppModel
                 'uri'        => $vars['uri'],
                 'company_id' => $company_id,
                 'parent'     => $vars['parent'],
-                'access'     => $vars['access']
+                'access'     => $vars['access'],
+                'target'     => $vars['target']
             ]);
             return true;
         }
@@ -746,7 +747,8 @@ class CmsPages extends AppModel
                 'title'  => serialize($vars['title']),
                 'uri'    => $vars['uri'],
                 'parent' => $vars['parent'],
-                'access' => $vars['access']
+                'access' => $vars['access'],
+                'target'     => $vars['target']
             ]);
             return true;
         }

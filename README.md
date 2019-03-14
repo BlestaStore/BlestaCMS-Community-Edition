@@ -1,6 +1,6 @@
 ## BlestaCMS Community Edition
 
-Current version: **1.3.5**
+Current version: **1.3.6**
 
 #### About
 
@@ -123,10 +123,9 @@ Edit as required and then put a `<?php } ?>` below the end of the nav lists. So 
                             </ul>
                         <?php
                             }
-                          }
                         ?>
                     </li>
-                    <?php } ?>
+                    <?php } } ?>
                 </ul>
             </div>
         </nav>

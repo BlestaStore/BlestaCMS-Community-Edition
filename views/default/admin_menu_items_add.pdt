@@ -39,6 +39,12 @@
 			</li>
 			<li>
 				<?php
+					$this->Form->label($this->_("blesta_cms.target", true), "target");
+					$this->Form->fieldSelect("target", ["-" => $this->_("blesta_cms.none", true), "newtab" => $this->_("blesta_cms.newtab", true)], $this->Html->ifSet($vars->target), array('id' => "target"));
+				?>
+			</li>
+			<li>
+				<?php
 					$this->Form->label($this->_("blesta_cms.parent", true), "parent");
 					$this->Form->fieldSelect("parent", $parents, $this->Html->ifSet($vars->parent), array('id' => "parent"));
 				?>
@@ -58,7 +64,7 @@
 <?php
         $i = false;
     }
-    
+
 	$this->Form->end();
 	$this->Widget->end();
 ?>

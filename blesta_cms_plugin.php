@@ -20,7 +20,7 @@ class BlestaCmsPlugin extends Plugin
     /**
      * @var string The plugin version
      */
-    private static $version = '1.3.5';
+    private static $version = '1.3.6';
 
     /**
      * @var array The plugin authors
@@ -187,6 +187,7 @@ class BlestaCmsPlugin extends Plugin
                     ->setField('uri', ['type' => 'text'])
                     ->setField('parent', ['type' => 'varchar', 'size' => 255])
                     ->setField('access', ['type' => 'enum', 'size' => "'public','hidden'", 'default' => 'public'])
+                    ->setField('target', ['type' => 'enum', 'size' => "'-','newtab'", 'default' => '-'])
                     ->setKey(['id'], 'primary')
                     ->create('blestacms_menus', true);
 
@@ -378,12 +379,16 @@ class BlestaCmsPlugin extends Plugin
               //Insert Settings Data
               $this->Record->insert('blestacms_settings', [
                       'settings_key'           => 'recaptcha',
-                      'settings_value'         => NULL,
-                      'settings_1'             => NULL,
-                      'settings_2'             => NULL,
+                      'settings_value'         => '',
+                      'settings_1'             => '',
+                      'settings_2'             => '',
                       'settings_description'   => 'Google Recaptcha',
                       'company_id'             => Configure::get('Blesta.company_id'),
               ]);
+            }
+            if (version_compare($current_version, '1.3.6', '<')) {
+				         $this->Record->query("ALTER TABLE `blestacms_menus` ADD `target` ENUM('-','newtab') default '-' AFTER `access`;"
+              );
             }
         }
     }
