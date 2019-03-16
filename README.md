@@ -35,10 +35,6 @@ Add the following code to the top:
     $menu_items = $this->CmsPages->getMenuItemsWithChilds();
     $lang = $this->CmsPages->getCurrentLang();
     $default_lang = $this->CmsPages->getAllLang()[0]->uri;
-
-    if (strtolower(substr($page_title, 0, 8)) == 'client #') {
-        $page_title = substr($page_title, intval(8) + strlen($client->id_code));
-    }
 ?>
 ```
 
@@ -57,7 +53,8 @@ Then remove all the `<li></li>` code until you get the dropdown and keep one of 
 Replase the dropdown first bits with:
 ```
 <li>
-    <a href="//<?php echo $this->Html->safe(trim($system_company->hostname . $this->Html->safe(WEBDIR) . ($default_lang == $lang ? null : $lang . '/') . ($item->uri == '/' ? null : $item->uri)), ''); ?>"
+    <a href="<?php if(isset($item->target) != 'newtab'){ ?>
+//<?php echo $this->Html->safe(trim($system_company->hostname . $this->Html->safe(WEBDIR) . ($default_lang == $lang ? null : $lang . '/') . ($item->uri == '/' ? null : $item->uri)), ''); }else{ echo $item->uri; } ?>" <?php if(isset($item->target) === 'newtab'){ ?>target="_blank"<?php } ?>
         <?php if (!empty($item->childs)) { ?>aria-expanded="false" class="dropdown-toggle" data-toggle="dropdown"<?php } ?>>
         <?php echo $this->Html->ifSet($item->title[$lang], $item->title[$default_lang]); ?>
         <?php if (!empty($item->childs)) { ?><i class="fa fa-angle-down"></i><?php } ?>
@@ -70,7 +67,8 @@ Replase the dropdown first bits with:
                 foreach ($item->childs as $child) {
             ?>
             <li>
-                <a href="//<?php echo $this->Html->safe(trim($system_company->hostname . $this->Html->safe(WEBDIR) . ($default_lang == $lang ? null : $lang . '/') . ($item->uri == '/' ? null : $child->uri)), ''); ?>">
+                <a href="<?php if(isset($child->target) != 'newtab'){ ?>
+//<?php echo $this->Html->safe(trim($system_company->hostname . $this->Html->safe(WEBDIR) . ($default_lang == $lang ? null : $lang . '/') . ($child->uri == '/' ? null : $child->uri)), ''); }else{ echo $child->uri; } ?>" <?php if(isset($child->target) === 'newtab'){ ?>target="_blank"<?php } ?>>
                     <?php echo $this->Html->ifSet($child->title[$lang], $child->title[$default_lang]); ?>
                 </a>
             </li>
@@ -102,10 +100,11 @@ Edit as required and then put a `<?php } ?>` below the end of the nav lists. So 
                       foreach ($menu_items as $item) {
                   ?>
                     <li>
-                        <a href="//<?php echo $this->Html->safe(trim($system_company->hostname . $this->Html->safe(WEBDIR) . ($default_lang == $lang ? null : $lang . '/') . ($item->uri == '/' ? null : $item->uri)), ''); ?>"
+                        <a href="<?php if(isset($item->target) != 'newtab'){ ?>
+									//<?php echo $this->Html->safe(trim($system_company->hostname . $this->Html->safe(WEBDIR) . ($default_lang == $lang ? null : $lang . '/') . ($item->uri == '/' ? null : $item->uri)), ''); }else{ echo $item->uri; } ?>" <?php if(isset($item->target) === 'newtab'){ ?>target="_blank"<?php } ?>
                             <?php if (!empty($item->childs)) { ?>aria-expanded="false" class="dropdown-toggle" data-toggle="dropdown"<?php } ?>>
-                            <?php echo $this->Html->ifSet($item->title[$lang], $item->title[$default_lang]); ?>
-                            <?php if (!empty($item->childs)) { ?><i class="fa fa-angle-down"></i><?php } ?>
+                            	<?php echo $this->Html->ifSet($item->title[$lang], $item->title[$default_lang]); ?>
+								<?php if (!empty($item->childs)) { ?><i class="fa fa-angle-down"></i><?php } ?>
                         </a>
                             <?php
                                 if (!empty($item->childs)) {
@@ -115,7 +114,8 @@ Edit as required and then put a `<?php } ?>` below the end of the nav lists. So 
                                     foreach ($item->childs as $child) {
                                 ?>
                                 <li>
-                                    <a href="//<?php echo $this->Html->safe(trim($system_company->hostname . $this->Html->safe(WEBDIR) . ($default_lang == $lang ? null : $lang . '/') . ($item->uri == '/' ? null : $child->uri)), ''); ?>">
+                                    <a href="<?php if(isset($child->target) != 'newtab'){ ?>
+									//<?php echo $this->Html->safe(trim($system_company->hostname . $this->Html->safe(WEBDIR) . ($default_lang == $lang ? null : $lang . '/') . ($child->uri == '/' ? null : $child->uri)), ''); }else{ echo $child->uri; } ?>" <?php if(isset($child->target) === 'newtab'){ ?>target="_blank"<?php } ?>>
                                         <?php echo $this->Html->ifSet($child->title[$lang], $child->title[$default_lang]); ?>
                                     </a>
                                 </li>
