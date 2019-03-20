@@ -237,6 +237,54 @@ if (!empty($active_nav['secondary'])) {
 ?>
 ```
 
+If you want to use the description on the pages use the following set-up:
+```
+<?php
+if (!empty($active_nav['secondary'])) {
+?>
+<div class="container">
+    <div class="row<?php echo (!$this->Html->ifSet($show_header, true) ? ' login' : '');?>">
+      <div class="col-md-3">
+          <div class="list-group">
+              <?php
+              foreach ($active_nav['secondary'] as $link => $value) {
+              ?>
+                  <a href="<?php $this->Html->_($link);?>" class="list-group-item borderless left-nav <?php echo ($value['active'] ? 'active' : '');?>">
+                      <i class="<?php $this->Html->_($value['icon']);?>"></i>
+                      <?php
+                      $this->Html->_($value['name']);
+                      ?>
+                  </a>
+              <?php
+              }
+              ?>
+          </div>
+      </div>
+      <div class="col-md-9">
+          <div class="row">
+              <?php echo $content;?>
+          </div>
+      </div>
+    </div>
+  </div>
+<?php
+} else {
+   if (strpos($_SERVER['REQUEST_URI'], "client") && $page_title != "Log In" && $page_title != "Reset Password" ||
+            strpos($_SERVER['REQUEST_URI'], "order") || strpos($_SERVER['REQUEST_URI'], "plugin") || strpos($_SERVER['REQUEST_URI'], "blog") !== false){
+?>
+<div class="container" style="margin-top: 30px;">
+        <div class="row <?php echo (!$this->Html->ifSet($show_header, true) ? ' login' : '');?>">
+        <?php }else{ ?>
+<div class="container-fluid">
+        <div class="row <?php echo (!$this->Html->ifSet($show_header, true) ? ' login' : '');?>">
+        <?php }
+       echo $content;
+   }
+?>
+        </div>
+</div>
+```
+
 #### How to display Blesta's nav to logged in customers only?
 
 Replace it with the following:
