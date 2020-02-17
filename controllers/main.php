@@ -131,7 +131,7 @@ class Main extends BlestaCmsController
         $uri = isset($this->get[0]) ? $this->get[0] : '/';
 
         // Load models
-        $this->uses(['BlestaCms.CmsPages', 'PluginManager']);
+        $this->uses(['BlestaCms.CmsPages', 'BlestaCms.CmsSettings', 'PluginManager']);
 
         // Get current language
         $lang = $this->CmsPages->getCurrentLang();
@@ -181,6 +181,7 @@ class Main extends BlestaCmsController
             $this->redirect($this->base_uri . $uri);
         }
         $content = $page->content;
+        $capsettings = $this->CmsSettings->getSettings('recaptcha');
 
         // Set variables
         $this->set('lang', $lang);
@@ -189,6 +190,7 @@ class Main extends BlestaCmsController
         $this->set('content', $content);
         $this->set('meta_tags', $page->meta_tags[$lang]);
         $this->set('description', $page->description[$lang]);
+        $this->set('capsettings', $capsettings->settings_1);
 
         // Set structure variables
         $this->structure->set('lang', $lang);
