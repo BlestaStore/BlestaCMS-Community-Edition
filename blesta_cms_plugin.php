@@ -84,7 +84,6 @@ class BlestaCmsPlugin extends Plugin
         // Load Plugin Model
         Loader::loadModels($this, ['BlestaCms.CmsPages', 'Settings', 'Permissions', 'PluginManager', 'Plugins']);
 
-        list($this->plugin) = $this->PluginManager->getByDir('blesta_cms');
     }
 
     /**
