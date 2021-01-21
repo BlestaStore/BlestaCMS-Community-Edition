@@ -404,7 +404,8 @@ class BlestaCmsPlugin extends Plugin
 		$this->Record->query("ALTER TABLE blestacms_posts_comments CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
 		$this->Record->query("ALTER TABLE blestacms_menus CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
 		$this->Record->query("ALTER TABLE blestacms_languages CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
-		$this->Record->query("ALTER TABLE blestacms_settings CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");    
+		$this->Record->query("ALTER TABLE blestacms_settings CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"); 
+	    }
         }
     }
 
