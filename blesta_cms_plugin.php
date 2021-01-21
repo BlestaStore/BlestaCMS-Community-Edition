@@ -20,7 +20,7 @@ class BlestaCmsPlugin extends Plugin
     /**
      * @var string The plugin version
      */
-    private static $version = '1.3.6';
+    private static $version = '1.4.0';
 
     /**
      * @var array The plugin authors
@@ -226,6 +226,14 @@ class BlestaCmsPlugin extends Plugin
                       'settings_description'   => 'Google Recaptcha',
                       'company_id'             => Configure::get('Blesta.company_id'),
               ]);
+		
+            $this->Record->query("ALTER TABLE blestacms_pages CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+            $this->Record->query("ALTER TABLE blestacms_blog_posts CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+            $this->Record->query("ALTER TABLE blestacms_blog_categories CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+            $this->Record->query("ALTER TABLE blestacms_posts_comments CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+            $this->Record->query("ALTER TABLE blestacms_menus CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+            $this->Record->query("ALTER TABLE blestacms_languages CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+            $this->Record->query("ALTER TABLE blestacms_settings CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
 
             // Load all the configuration files and insert the sample data in to the database.
             $config_files = array_diff(scandir(dirname(__FILE__) . DS . 'config' . DS), ['.', '..']);
@@ -271,8 +279,6 @@ class BlestaCmsPlugin extends Plugin
                 $blesta_routes = file_get_contents("config" . DS . "routes.php");
                 $blesta_routes = str_replace("'cms'", "'blesta_cms'", $blesta_routes);
                 $blesta_routes = str_replace("'/cms/main/index/$1'", "'/blesta_cms/main/index/$1'", $blesta_routes);
-                $blesta_routes = str_replace('"cms"', '"blesta_cms"', $blesta_routes);
-                $blesta_routes = str_replace('"/cms/main/index/$1"', '"/blesta_cms/main/index/$1"', $blesta_routes);
 
                 file_put_contents("config" . DS . "routes.php", $blesta_routes);
             }
@@ -301,7 +307,8 @@ class BlestaCmsPlugin extends Plugin
 
                 // Automate Route Change from BlestaCMS to Portal
                 $blesta_routes = file_get_contents("config" . DS . "routes.php");
-                $blesta_routes = str_replace("blesta_cms", "cms", $blesta_routes);
+                $blesta_routes = str_replace("'blesta_cms'", "'cms'", $blesta_routes);
+                $blesta_routes = str_replace("'/blesta_cms/main/index/$1'", "'/cms/main/index/$1'", $blesta_routes);
 
                 file_put_contents("config" . DS . "routes.php", $blesta_routes);
             } catch (Exception $e) {
@@ -386,9 +393,18 @@ class BlestaCmsPlugin extends Plugin
               ]);
             }
             if (version_compare($current_version, '1.3.6', '<')) {
-				         $this->Record->query("ALTER TABLE `blestacms_menus` ADD `target` ENUM('-','newtab') default '-' AFTER `access`;"
+		$this->Record->query("ALTER TABLE `blestacms_menus` ADD `target` ENUM('-','newtab') default '-' AFTER `access`;"
               );
             }
+	    if (version_compare($current_version, '1.4.0', '<')) {
+		// Upgrade tables to support Emojis in Blesta 5.0.0
+		$this->Record->query("ALTER TABLE blestacms_pages CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+		$this->Record->query("ALTER TABLE blestacms_blog_posts CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+		$this->Record->query("ALTER TABLE blestacms_blog_categories CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+		$this->Record->query("ALTER TABLE blestacms_posts_comments CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+		$this->Record->query("ALTER TABLE blestacms_menus CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+		$this->Record->query("ALTER TABLE blestacms_languages CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+		$this->Record->query("ALTER TABLE blestacms_settings CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");    
         }
     }
 
@@ -452,7 +468,7 @@ class BlestaCmsPlugin extends Plugin
 
     public function run($event)
     {
-        $result = $event->getReturnVal();
+        $result = $event->getReturnValue();
         $params = $event->getParams();
 
         $portal = $params['portal'];
@@ -478,7 +494,7 @@ class BlestaCmsPlugin extends Plugin
             }
         }
 
-        $event->setReturnVal($result);
+        $event->setReturnValue($result);
         return;
     }
 
