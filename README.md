@@ -1,6 +1,8 @@
 ## BlestaCMS Community Edition
 
-Current version: **1.3.6**
+Current version: **1.4.0**
+
+This version supports Blesta 5.0.0.
 
 #### About
 
@@ -8,15 +10,14 @@ The BlestaCMS Community Edition is the open-source 100% version of the BlestaCMS
 This plugin allows you to extend Blesta to make it your website. If you need support at any time you can post on the Blesta.Store community forums (Will need a client account) or ask the kind community at Blesta.com/forums.
 
 If you would like to get support from the Blesta.store team you will require a paid license key. These come at a wide range of plans from monthly, yearly or one-time.
-Grabbing a key also allows you to access a more improved BlestaCMS Premium version.
+
+Purchasing a license key also allows you to access a more improved BlestaCMS Pro version, which has more features.
 
 #### Extra Information:
 
 Premium support: https://blesta.store/plugin/support/validate
 
 Complimentary support: https://blesta.store/plugin/support/complimentary
-
-Task board: https://atlantis.plutio.com/p/cms
 
 #### How do I install?
 

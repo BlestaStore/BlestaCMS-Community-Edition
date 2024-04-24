@@ -30,8 +30,7 @@ class AdminPosts extends BlestaCmsController
         $this->structure->set('page_title', Language::_('blesta_cms.posts', true));
 
         // Include WYSIWYG
-        $this->Javascript->setFile('ckeditor/ckeditor.js', 'head', VENDORWEBDIR);
-        $this->Javascript->setFile('ckeditor/adapters/jquery.js', 'head', VENDORWEBDIR);
+        $this->Javascript->setFile('blesta/ckeditor/build/ckeditor.js', 'head', VENDORWEBDIR);
     }
 
     /**

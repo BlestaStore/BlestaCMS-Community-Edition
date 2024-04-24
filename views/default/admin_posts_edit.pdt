@@ -198,6 +198,6 @@
         });
 
         // WYSIWYG Editor
-        $('textarea.wysiwyg').ckeditor(function() {}, {language: 'en'});
+        $('.wysiwyg').blestaBindWysiwygEditor({language: 'en'});
     });
 </script>
