@@ -20,12 +20,12 @@ class BlestaCmsPlugin extends Plugin
     /**
      * @var string The plugin version
      */
-    private static $version = '1.3.6';
+    private static $version = '1.4.1';
 
     /**
      * @var array The plugin authors
      */
-    private static $authors = [['name' => 'GosuHost for BlestaStore', 'url' => 'https://blesta.store']];
+    private static $authors = [['name' => 'CubeData and GosuHost for BlestaStore', 'url' => 'https://blesta.store']];
 
     /**
      * @var array The ACL plugin permissions
@@ -83,8 +83,6 @@ class BlestaCmsPlugin extends Plugin
 
         // Load Plugin Model
         Loader::loadModels($this, ['BlestaCms.CmsPages', 'Settings', 'Permissions', 'PluginManager', 'Plugins']);
-
-        list($this->plugin) = $this->PluginManager->getByDir('blesta_cms');
     }
 
     /**
@@ -267,7 +265,7 @@ class BlestaCmsPlugin extends Plugin
                             'action'    => $permission['action']
                         ]);
                 }
-
+				
                 // Automate Route Change from Portal to BlestaCMS
                 $blesta_routes = file_get_contents("config" . DS . "routes.php");
                 $blesta_routes = str_replace("'cms'", "'blesta_cms'", $blesta_routes);
@@ -453,7 +451,7 @@ class BlestaCmsPlugin extends Plugin
 
     public function run($event)
     {
-        $result = $event->getReturnVal();
+        $result = $event->getReturnValue();
         $params = $event->getParams();
 
         $portal = $params['portal'];
@@ -479,7 +477,7 @@ class BlestaCmsPlugin extends Plugin
             }
         }
 
-        $event->setReturnVal($result);
+        $event->setReturnValue($result);
         return;
     }
 
