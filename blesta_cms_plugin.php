@@ -20,7 +20,7 @@ class BlestaCmsPlugin extends Plugin
     /**
      * @var string The plugin version
      */
-    private static $version = '1.4.1';
+    private static $version = '1.5.0';
 
     /**
      * @var array The plugin authors
@@ -469,12 +469,17 @@ class BlestaCmsPlugin extends Plugin
 
             // Get page
             $page = $this->CmsPages->getPageUri($uri, true);
-            $page_title = $page->title[$lang];
+            $page_title = $page->title[$lang] ?? "Page";
 
-            foreach ($page->meta_tags[$lang]['key'] as $key => $value) {
+			if (isset(($page->meta_tags[$lang]['key'])) && count($page->meta_tags[$lang]['key']) == 0)
+			{
+				//skip
+			} elseif (isset(($page->meta_tags[$lang]['key'])) && count($page->meta_tags[$lang]['key']) > 0) {
+			 foreach ($page->meta_tags[$lang]['key'] as $key => $value) {
                 $message = '<meta name="' . $page->meta_tags[$lang]['key'][$key] . '" content="' . $page->meta_tags[$lang]['value'][$key] . '">';
                 array_push($result['head'], $message);
-            }
+             }
+			}
         }
 
         $event->setReturnValue($result);
